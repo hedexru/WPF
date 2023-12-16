@@ -1,0 +1,99 @@
+﻿<Page x:Class="WpfApp2.PageEmployee"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:core="clr-namespace:WpfApp2.Model"
+      Loaded="Page_Loaded"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Страница сотрудника">
+
+    <Page.Resources>
+        <core:ListTitle x:Key="listTitle" />
+    </Page.Resources>
+
+    <StackPanel Background="White" Margin="0,0,-186,0">
+        <Menu>
+            <MenuItem Header="Действие">
+                <MenuItem Header="Отменить" Command="Undo"/>
+                <Separator/>
+                <MenuItem Header="Создать" Command="New"/>
+                <MenuItem Header="Редактировать"/>
+                <MenuItem Header="Сохранить" Command="Save"/>
+                <MenuItem Header="Найти" Command="Find"/>
+                <Separator/>
+                <MenuItem Header="Удалить" Command="Delete"/>
+            </MenuItem>
+            <MenuItem Header="Отчет"/>
+        </Menu>
+        <ToolBar Name="ToolBar1" Margin="3">
+            <Button Name="UndoBtn" Command="Undo" ToolTip="Отменить редактирование/создание" Margin="5,2,5,2">
+                <Image Source="image/Undo.png"/>
+            </Button>
+            <Button Name="AddBtn" Command="New" ToolTip="Добавление" Margin="5,2,5,2">
+                <Image Source="image/Add.png"/>
+            </Button>
+
+            <Button Name="FindInFileBtn" Command="Find" ToolTip="Просмотреть" Margin="5,2,5,2">
+                <Image Source="image/FindInFile.png"/>
+            </Button>
+
+            <Button Name="SaveBtn" Command="Save" ToolTip="Сохранить" Margin="5,2,5,2">
+                <Image Source="image/Save.png"/>
+            </Button>
+        </ToolBar>
+        <TextBlock Margin="5">Список сотрудников</TextBlock>
+        <DataGrid Name="DataGridEmployee"
+                  ItemsSource="{Binding}"
+                  AutoGenerateColumns="False"
+                  HorizontalAlignment="Left"
+                  MaxWidth="1000" MaxHeight="295"
+                  RowBackground="#FFE6D3EF"
+                  AlternatingRowBackground="#FC96CFD4"
+                  BorderBrush="#FF1F33EB"
+                  BorderThickness="3"
+                  RowHeight="25"
+                  Cursor="Hand"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False" Width="982">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Фамилия"
+                                    Binding="{Binding Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Имя"
+                                    Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Отчество"
+                                    Binding="{Binding Patronymic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridComboBoxColumn Header="Должность" 
+                        ItemsSource="{Binding Source={StaticResource listTitle}}"
+                        DisplayMemberPath="Title1" 
+                        SelectedValueBinding="{Binding TitleID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="ID"/>
+
+                <DataGridTemplateColumn Header="Дата рождения">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding BirstDate, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding BirstDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Телефон" 
+                                    Binding="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Электронная почта"
+                                    Binding="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+    <Page.CommandBindings>
+        <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed" CanExecute="UndoCommandBinding_CanExecute"/>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed" CanExecute="NewCommandBinding_CanExecute"/>
+        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
+        <CommandBinding Command="Find" Executed="FindCommandBinding_Executed" CanExecute="FindCommandBinding_CanExecute"/>
+    </Page.CommandBindings>
+</Page>
